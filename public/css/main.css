@@ -1,0 +1,127 @@
+body {
+    background-color: white;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+header {
+    position: absolute;
+    width: 100%;
+    top: 2rem;
+
+}
+
+nav {
+    font-weight: bold;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    background-color: transparent; 
+    
+    
+    a {
+        text-decoration: none;
+        color: white;
+        text-shadow: 
+        1px 1px 2px black, 
+        -1px -1px 2px black,
+        1px -1px 2px black,
+        -1px 1px 2px black; 
+    }
+}
+
+.nav__link:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    padding-right: 1.5rem;
+    margin-top: .5rem;
+    font-size: 2rem;
+}
+
+
+.form-section {
+ padding-right: 2rem;
+ padding-left: 1.5rem;
+ margin-top: 1.5rem;
+ color: white;
+ text-shadow: 
+ 1px 1px 2px black,
+ -1px -1px 2px black,
+ 1px -1px 2px black,
+ -1px 1px 2px black;  
+
+ h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+ }
+}
+
+.btn {
+    background-color: transparent;
+    border: none;
+}
+
+.arrow {
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.form-title {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.form-container {
+    margin-top: 1rem;
+    display: flex;
+}
+
+.weather-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.weather-form div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.weather-form label {
+    width: 8rem;
+    text-align: left;
+}
+
+.weather-form input{
+    width: 6rem;
+}
+
+.weather-form select{
+    width: 6.4rem;
+}
+.sub-btn {
+    width: 15.5rem;
+    padding: .3rem;
+    border-radius: 8px;
+    border: none;
+    border: 1px solid black;
+}
+
+.sub-btn:hover {
+    background-color: rgb(45, 192, 45);
+    color: white;
+    border: none;
+}
