@@ -22,7 +22,6 @@ function preload() {
     iceImg = loadImage('/GentWeather/public/assets/ice.png'); // Load the ice image
 }
 
-
 function setup() {
     createCanvas(windowWidth, windowHeight);
     textFont('Arial');
