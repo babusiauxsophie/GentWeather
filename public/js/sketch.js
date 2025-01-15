@@ -14,10 +14,10 @@ let cloudPositions = [];
 const weatherAPI = "https://api.weatherapi.com/v1/current.json?key=acdd62ff08054cb9b2e111932222112&q=Ghent&aqi=no";
 
 function preload() {
-    img = loadImage('../assets/Gent.png');
-    raincloudImg = loadImage('../assets/raincloud.png');
-    sunImg = loadImage('../assets/sun.png');
-    moonImg = loadImage('../assets/moon.png');
+    img = loadImage('/GentWeather/public/assets/Gent.png');
+    raincloudImg = loadImage('/GentWeather/public/assets/raincloud.png');
+    sunImg = loadImage('/GentWeather/public/assets/sun.png');
+    moonImg = loadImage('/GentWeather/public/assets/moon.png');
 }
 
 function setup() {
