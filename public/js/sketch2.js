@@ -14,13 +14,14 @@ let raindrops = [];
 let cloudPositions = [];
 
 function preload() {
-    img = loadImage('../public/assets/Gent.png');
-    raincloudImg = loadImage('../public/assets/raincloud.png');
-    sunImg = loadImage('../public/assets/sun.png');
-    moonImg = loadImage('../public/assets/moon.png');
-    vuurImg = loadImage('../public/assets/vuur.png');
-    iceImg = loadImage('../public/assets/ice.png'); // Load the ice image
+    img = loadImage('/GentWeather/public/assets/Gent.png');
+    raincloudImg = loadImage('/GentWeather/public/assets/raincloud.png');
+    sunImg = loadImage('/GentWeather/public/assets/sun.png');
+    moonImg = loadImage('/GentWeather/public/assets/moon.png');
+    vuurImg = loadImage('/GentWeather/public/assets/vuur.png');
+    iceImg = loadImage('/GentWeather/public/assets/ice.png'); // Load the ice image
 }
+
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
