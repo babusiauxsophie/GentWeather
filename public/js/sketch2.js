@@ -3,9 +3,9 @@ let raincloudImg;
 let sunImg;
 let moonImg;
 let vuurImg;
-let iceImg; // Added ice image variable
+let iceImg;
 
-let temperature = -6;
+let temperature = -1;
 let cloudCoverage = 70;
 let is_day = 0;
 let precip_mm = 2.5;
@@ -19,7 +19,7 @@ function preload() {
     sunImg = loadImage('/GentWeather/public/assets/sun.png');
     moonImg = loadImage('/GentWeather/public/assets/moon.png');
     vuurImg = loadImage('/GentWeather/public/assets/vuur.png');
-    iceImg = loadImage('/GentWeather/public/assets/ice.png'); // Load the ice image
+    iceImg = loadImage('/GentWeather/public/assets/ice.png');
 }
 
 function setup() {
@@ -86,8 +86,6 @@ function draw() {
 
     blendMode(BLEND);
 
-    // text(temperature + "°C", width - 20, 20);
-
     if (temperature > 50) {
         let vuurImgSize = 300;
         let numberOfImages = Math.floor(width / vuurImgSize);
@@ -106,7 +104,6 @@ function draw() {
         tempElement.innerText = `Gent: ${temperature}°C`;
     }
 }
-
 
 function getBackgroundColor(cloudPercentage, isDay) {
     if (isDay) {
@@ -131,14 +128,9 @@ function getBackgroundColor(cloudPercentage, isDay) {
 function displaySunOrMoon(isDay) {
     let iconImg = isDay ? sunImg : moonImg;
     let iconSize = 100;
-
-    // Adjust the position to be 1 rem lower
     let remToPixels = parseFloat(getComputedStyle(document.documentElement).fontSize);
     let yOffset = 60 + remToPixels;
-
-    // Calculate the x position dynamically based on screen width
-    let xOffset = window.innerWidth - iconSize - 20; // 20px from the right edge
-
+    let xOffset = window.innerWidth - iconSize - 20;
     image(iconImg, xOffset, yOffset, iconSize, iconSize);
 }
 
@@ -151,12 +143,9 @@ function initializeCloudPositions(cloudPercentage) {
     } else if (cloudPercentage >= 20) {
         cloudCount = 2;
     }
-
     cloudPositions = [];
-
     for (let i = 0; i < cloudCount; i++) {
         let xPosition, yPosition;
-
         if (cloudCount === 3) {
             if (i === 0) {
                 xPosition = random(50, width / 3 - 300);
@@ -170,14 +159,12 @@ function initializeCloudPositions(cloudPercentage) {
             xPosition = random(50, width - 300 - 50);
             yPosition = random(20, height * 0.2);
         }
-
         cloudPositions.push({ x: xPosition, y: yPosition });
     }
 }
 
 function displayRainclouds() {
     let cloudImgSize = 300;
-
     for (let i = 0; i < cloudPositions.length; i++) {
         let position = cloudPositions[i];
         image(raincloudImg, position.x, position.y, cloudImgSize, cloudImgSize);
@@ -199,14 +186,13 @@ class Raindrop {
             this.y = random(-20, -100);
         }
     }
-
     show() {
         if (this.isSnow) {
             fill(255);
             noStroke();
             ellipse(this.x, this.y, this.length, this.length);
         } else {
-            stroke(0, 0, 255); 
+            stroke(0, 0, 255);
             strokeWeight(2);
             line(this.x, this.y, this.x, this.y + this.length);
         }
@@ -215,25 +201,22 @@ class Raindrop {
 
 function initializeRaindrops() {
     raindrops = [];
-    
     if (precip_mm > 0) {
         let numberOfRaindrops = 0;
         let dropSpeed = 0;
-
         if (precip_mm < 0.5) {
-            numberOfRaindrops = 30; 
+            numberOfRaindrops = 30;
             dropSpeed = 2;
         } else if (precip_mm >= 0.5 && precip_mm < 4) {
-            numberOfRaindrops = 100; 
+            numberOfRaindrops = 100;
             dropSpeed = 4;
         } else if (precip_mm >= 4 && precip_mm < 8) {
-            numberOfRaindrops = 200; 
+            numberOfRaindrops = 200;
             dropSpeed = 6;
         } else {
-            numberOfRaindrops = 300; 
+            numberOfRaindrops = 300;
             dropSpeed = 8;
         }
-
         for (let i = 0; i < numberOfRaindrops; i++) {
             let x = random(0, width);
             let y = random(-100, height);

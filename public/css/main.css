@@ -41,13 +41,39 @@ ul {
 }
 
 .nav-links {
+    font-size: 1rem;
     display: flex;
-    gap: 1.5rem;
-    padding-right: 1.5rem;
-    margin-top: .5rem;
-    font-size: 2rem;
+    gap: 1rem;
 }
 
+
+
+.nav-btn {
+    background-color: rgb(45, 192, 45);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: .5rem;
+    font-size: 1rem;
+}
+
+@media (min-width: 580px) {
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      padding-right: 1.5rem;
+      margin-top: .5rem;
+      font-size: 2rem;
+    }
+    .nav-btn {
+        background-color: rgb(45, 192, 45);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 1rem;
+        font-size: 1.3rem;
+    }
+}
 
 .form-section {
  padding-right: 2rem;
@@ -61,9 +87,15 @@ ul {
  -1px 1px 2px black;  
 
  h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
  }
+}
+
+@media (min-width: 580px) {
+    .form-section h1 {
+        font-size: 2rem;
+    }
 }
 
 .btn {
@@ -82,6 +114,8 @@ ul {
     gap: 1rem;
     align-items: center;
 }
+
+
 
 .form-container {
     margin-top: 1rem;
@@ -114,10 +148,13 @@ ul {
 }
 .sub-btn {
     width: 15.5rem;
-    padding: .3rem;
+    padding: .5rem;
     border-radius: 8px;
     border: none;
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    background-color: rgb(45, 192, 45);
+    color: white;
+    font-weight: bold;
 }
 
 .sub-btn:hover {
@@ -126,3 +163,16 @@ ul {
     border: none;
 }
 
+.nav-btn:hover {
+    background-color: seagreen;
+}
+
+#gent-temp {
+    font-size: 1.2rem;
+}
+
+@media (min-width: 580px) {
+    #gent-temp {
+        font-size: 2rem;
+    }
+}

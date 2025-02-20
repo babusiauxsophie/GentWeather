@@ -3,14 +3,12 @@ let raincloudImg;
 let sunImg;
 let moonImg;
 
-let temperature = 0; // Default temp, will be replaced by API data
-let cloudCoverage = 0; // Default cloud coverage, will be replaced by API data
-let is_day = 0; // Day or night flag, will be replaced by API data
-let precip_mm = 0; // Precipitation level, will be replaced by API data
-
+let temperature = 0;
+let cloudCoverage = 0;
+let is_day = 0;
+let precip_mm = 0;
 let raindrops = [];
 let cloudPositions = [];
-
 let windSoundLittle, windSoundHard;
 let currentWindSpeed = 0;
 
@@ -21,28 +19,30 @@ function preload() {
     raincloudImg = loadImage('/GentWeather/public/assets/raincloud.png');
     sunImg = loadImage('/GentWeather/public/assets/sun.png');
     moonImg = loadImage('/GentWeather/public/assets/moon.png');
-
     soundFormats('mp3');
     windSoundLittle = loadSound('/GentWeather/public/assets/wind-little.mp3');
     windSoundHard = loadSound('/GentWeather/public/assets/wind-hard.mp3');
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const overlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const startButton = document.getElementById('startButton');
+document.addEventListener("DOMContentLoaded", function () {
+    if (!localStorage.getItem('popupShown')) {
+        const overlay = document.getElementById('overlay');
+        const popup = document.getElementById('popup');
+        const startButton = document.getElementById('startButton');
+        overlay.style.display = "block";
+        popup.style.display = "block";
 
-    overlay.style.display = "block";
-    popup.style.display = "block";
-
-    startButton.addEventListener('click', function() {
-        overlay.style.display = "none";
-        popup.style.display = "none";
-
-        if (typeof startSimulation === "function") {
-            startSimulation();
-        }
-    });
+        startButton.addEventListener('click', function () {
+            overlay.style.display = "none";
+            popup.style.display = "none";
+            localStorage.setItem('popupShown', 'true');
+            if (typeof startSimulation === "function") {
+                startSimulation();
+            }
+        });
+    } else {
+        startSimulation();
+    }
 });
 
 function startSimulation() {
@@ -59,21 +59,27 @@ function startSimulation() {
     initializeCloudPositions(cloudCoverage);
 
     fetchWeatherData();
+    setInterval(fetchWeatherData, 60000);
 }
 
 function fetchWeatherData() {
     fetch(weatherAPI)
         .then(response => response.json())
         .then(data => {
+            console.log("Raw weather data fetched:", data);
             temperature = data.current.temp_c;
             cloudCoverage = data.current.cloud;
             is_day = data.current.is_day;
             precip_mm = data.current.precip_mm;
             currentWindSpeed = data.current.wind_kph;
 
-            console.log("Current wind speed:", currentWindSpeed);
+            console.log("Temperature (C):", temperature);
+            console.log("Cloud coverage (%):", cloudCoverage);
+            console.log("Is day (1 for day, 0 for night):", is_day);
+            console.log("Precipitation (mm):", precip_mm);
+            console.log("Current wind speed (kph):", currentWindSpeed);
 
-            initializeRaindrops(); 
+            initializeRaindrops();
             initializeCloudPositions(cloudCoverage);
             playWindSound(currentWindSpeed);
         })
@@ -86,30 +92,35 @@ function playWindSound(windSpeed) {
 
     console.log("Wind speed:", windSpeed);
 
-    // Play 'wind-little' if the wind speed is greater than or equal to 10
-    if (windSpeed >= 10 && windSpeed < 29) {
+    if (windSpeed < 10) {
+        console.log("Playing wind-little sound (very quiet)");
+        if (!windSoundLittle.isPlaying()) {
+            windSoundLittle.setVolume(0.1);
+            windSoundLittle.loop();
+        }
+    }
+    else if (windSpeed >= 10 && windSpeed < 29) {
         console.log("Playing wind-little sound");
         if (!windSoundLittle.isPlaying()) {
             windSoundLittle.setVolume(0.5);
             windSoundLittle.loop();
         }
-    } 
-    // Handle 'wind-hard' for higher wind speeds
+    }
     else if (windSpeed >= 29 && windSpeed < 75) {
         console.log("Playing wind-hard sound (strong wind)");
         if (!windSoundHard.isPlaying()) {
             windSoundHard.setVolume(0.7);
             windSoundHard.loop();
         }
-    } else if (windSpeed >= 75) {
-        console.log("Playing wind-hard sound (very strong wind)"); 
+    }
+    else if (windSpeed >= 75) {
+        console.log("Playing wind-hard sound (very strong wind)");
         if (!windSoundHard.isPlaying()) {
             windSoundHard.setVolume(1.0);
             windSoundHard.loop();
         }
     }
 }
-
 
 function draw() {
     let bgColor = getBackgroundColor(cloudCoverage, is_day);
@@ -120,7 +131,6 @@ function draw() {
 
     let imgAspect = img.width / img.height;
     let canvasAspect = width / height;
-
     let srcX, srcY, srcWidth, srcHeight;
 
     if (imgAspect > canvasAspect) {
@@ -136,7 +146,6 @@ function draw() {
     }
 
     image(img, 0, 0, width, height, srcX, srcY, srcWidth, srcHeight);
-
     blendMode(OVERLAY);
 
     for (let i = 0; i < raindrops.length; i++) {
@@ -148,7 +157,7 @@ function draw() {
 
     let tempElement = document.getElementById('gent-temp');
     if (tempElement) {
-        tempElement.innerText = `Gent: ${temperature}°C`;  // Display temperature
+        tempElement.innerText = `Gent: ${temperature}°C`;
     }
 }
 
@@ -178,28 +187,25 @@ function displaySunOrMoon(isDay) {
     image(iconImg, 20, 20, iconSize, iconSize);
 }
 
-// Function to initialize raindrops based on precipitation level
 function initializeRaindrops() {
     raindrops = [];
 
     if (precip_mm > 0) {
         let numberOfRaindrops = 0;
         let dropSpeed = 0;
-
         if (precip_mm < 0.5) {
-            numberOfRaindrops = 30; // Slight rain
+            numberOfRaindrops = 30;
             dropSpeed = 2;
         } else if (precip_mm >= 0.5 && precip_mm < 4) {
-            numberOfRaindrops = 100; // Moderate rain
+            numberOfRaindrops = 100;
             dropSpeed = 4;
         } else if (precip_mm >= 4 && precip_mm < 8) {
-            numberOfRaindrops = 200; // Heavy rain
+            numberOfRaindrops = 200;
             dropSpeed = 6;
         } else {
-            numberOfRaindrops = 300; // Very heavy rain
+            numberOfRaindrops = 300;
             dropSpeed = 8;
         }
-
         for (let i = 0; i < numberOfRaindrops; i++) {
             let x = random(0, width);
             let y = random(-100, height);
@@ -208,7 +214,6 @@ function initializeRaindrops() {
     }
 }
 
-// Function to initialize cloud positions
 function initializeCloudPositions(cloudPercentage) {
     let cloudCount = 0;
     if (cloudPercentage >= 80) {
@@ -218,12 +223,10 @@ function initializeCloudPositions(cloudPercentage) {
     } else if (cloudPercentage >= 20) {
         cloudCount = 2;
     }
-
     cloudPositions = [];
 
     for (let i = 0; i < cloudCount; i++) {
         let xPosition, yPosition;
-
         if (cloudCount === 3) {
             if (i === 0) {
                 xPosition = random(50, width / 3 - 300);
@@ -237,14 +240,12 @@ function initializeCloudPositions(cloudPercentage) {
             xPosition = random(50, width - 300 - 50);
             yPosition = random(20, height * 0.2);
         }
-
         cloudPositions.push({ x: xPosition, y: yPosition });
     }
 }
 
 function displayRainclouds() {
     let cloudImgSize = 300;
-
     for (let i = 0; i < cloudPositions.length; i++) {
         let position = cloudPositions[i];
         image(raincloudImg, position.x, position.y, cloudImgSize, cloudImgSize);
@@ -273,7 +274,7 @@ class Raindrop {
             noStroke();
             ellipse(this.x, this.y, this.length, this.length);
         } else {
-            stroke(0, 0, 255); 
+            stroke(0, 0, 255);
             strokeWeight(2);
             line(this.x, this.y, this.x, this.y + this.length);
         }
@@ -282,5 +283,6 @@ class Raindrop {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+    initializeRaindrops();
     initializeCloudPositions(cloudCoverage);
 }
